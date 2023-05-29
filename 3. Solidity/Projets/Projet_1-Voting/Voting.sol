@@ -5,7 +5,7 @@ pragma solidity ^0.8.2;
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 /*
-* @title Democracy 2.0
+* @title Democracy 3.0
 * @author Kevin Collorig
 * @notice This contract implements a voting system for small organization
 * @dev Proposal IDs = Array index + 1
