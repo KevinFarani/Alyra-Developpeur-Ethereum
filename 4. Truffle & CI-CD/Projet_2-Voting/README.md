@@ -56,6 +56,15 @@ A chaque nouvel étape, on s'assure que les fonctions prévues fonctionnent bien
 
 Mais aussi que les fonctions non prévues dans l'étape en cours soient bien inactives.
 
+## Improvements
+
+On pourrait également ajouter les fonction de type Getter afin d'améliorer encore plus le coverage de nos tests.
+
+## Nex Steps
+
+Réaliser les tests sur un testnet.
+
+Auditer la sécurité du contrat.
 
 ## License
 
