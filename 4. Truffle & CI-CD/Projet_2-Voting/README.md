@@ -27,6 +27,8 @@ npm install ganache
 npm install --save-exact openzeppelin-solidity
 
 npm install @openzeppelin/contracts
+
+npm install --save-dev @openzeppelin/test-helpers
 ```
 
 ## Utilisation
