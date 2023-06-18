@@ -318,6 +318,7 @@ COURS 7 : HARDHAT
 	=> npm install hardhat-docgen
 
 
+
 COURS 8 : OPTIMISATION
 - NatSpec : Ethereum Natural Language Specification Format
 	=> méthode de standardisation des commentaires sur Solidity
@@ -344,8 +345,15 @@ COURS 8 : OPTIMISATION
 	- If/Revert < Require << Assert
 		=> "require" et "revert" rembourse les gas non utilisés (mais pas tous ce qui a été utilisé avant)
 		=> "assert" ne rembourse pas les gas
+- Overflow/Underflow
+	=> dépassement de la plage arithmétique prévue pour un type donné
+		=> ex : -1 pour un uint (entier positif)
+	=> corrigé depuis version 0.8
+		=> Avant 0.8 : -1 pour uint => 2^256-1
+		=> Après 0.8 : -1 pour uint => Revert
+			=> unchecked : permet de revenir à l'ancienne façon 
 
-	
+
 
 DEV TESTS UNITAIRES
 - Describe (eq. context)
@@ -504,6 +512,7 @@ Dico :
 	=> Doc Solidity : https://docs.soliditylang.org/en/v0.8.18/
 		=> Lire au moins les Basics
 		=> exemples de dev : https://solidity-by-example.org/call/
+		=> https://consensys.github.io/smart-contract-best-practices/
 	=> Visualiser répartition des clients ETH : https://clientdiversity.org/
 	=> Comprendre le Zero Knowledge Proof : https://www.youtube.com/watch?v=_5VcPzBQwbs&ab_channel=myDid
 	=> Low level calls : https://ethereum-blockchain-developer.com/2022-04-smart-wallet/07-low-level-calls-in-depth/
@@ -519,6 +528,9 @@ Dico :
 	=> NatSpec : 
 		https://docs.soliditylang.org/en/develop/natspec-format.html
 		https://jeancvllr.medium.com/solidity-tutorial-all-about-comments-bc31c729975a
+	=> Attaques connues:
+		https://consensys.github.io/smart-contract-best-practices/attacks/
+		https://rekt.news/fr/
 		
 A Regarder 
 	=> Bitcoin Arte sur youtube
