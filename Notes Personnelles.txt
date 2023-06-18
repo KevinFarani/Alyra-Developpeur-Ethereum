@@ -243,14 +243,20 @@ COURS 5 : SMART CONTRACT & SOLIDITY
 - Receive / Fallback (fonctions par défaut)
 	=> permet de gérer la reception d'ether sur un contrat
 	=> presque toujours "external payable"
-	=> voir schéma sur le cours du live par Ben pour comprendre la différence entre les deux
+	=> Différence (voir schéma sur le cours du live par Ben pour mieux comprendre)
+		=> Receive : s'execute lors d'un envoi uniquement d'ether vers le contrat
+		=> Fallback : s'execute lors d'un envoi d'ether avec des data ou lors de l'appel d'une fonction du contrat qui n'existe pas
+	=> WARNING : Eviter à tout prix l'interaction avec le storage du contrat (ex modifs de variables) car c'est couteux en gas et cela peut mettre en echec des fonctions transfer ou send qui essaient de nous envoyer de l'argent
+	=> BONNE PRATIQUE : ne mettre que de la génération d'event dans les fallback
 - Variables globales
 	=> variables disponibles directement depuis la blockchain
 	=> Les + utiles
 		=> msg.value : quantité d'ether envoyé vers une fonction
-		=> msg.sender : addresse de la personne qui a executé la fonction
+		=> msg.sender : addresse de la personne ou du contrat qui a executé la fonction
 			=> s'applique au dernier executant. Si j'appelle la fonction d'un contrat A qui lui appelle la fonction d'un contrat B, le msg.sender dans le contrat B contient l'addresse du contrat A.
 		=> block.timestamp : heure à laquelle la transaction a été effectuée (inscrite dans la blockchain)
+		=> tx.origin : addresse de la personne à l'origine d'un appel de fonction
+			=> WARNING : à proscrire des require !
 - OpenZeppelin
 	=> + grande librairie de smart contracts d'ethereum
 	=> utilisation gratuite, business model basé sur l'audit de sécurité
@@ -265,14 +271,28 @@ COURS 5 : SMART CONTRACT & SOLIDITY
 - Heritage
 	=> Is
 		=> copie l'entiéreté du corps du contrat parent dans l'enfant (toutes les fonctions)
-	=> Using
+	=> Using 
 		=> permet d'instancier un objet et d'utiliser les fonctions directement dessus
-	=> Call
-		=> appelle d'une fonction sur l'addresse d'un contrat
-			=> addr.call(abi.encodeWithSignature(myFunction()))
 	=> New
 		=> redéploie le contrat à une nouvelle addresse (consomme beaucoup de gas)
-		
+	=> Appels des fonctions
+		=> Appel avec interface
+			=> instanceContrat.function()
+			=> Revert de la fonction parent s'applique à la fonction enfant
+			=> BONNE PRATIQUE : mettre le contrat parent en paramètre de la fonction enfant où on l'appelle
+				=> WARNING : si le contrat parent existe mais que la fonction appelé n'existe pas, c'est la fonction fallback du contrat parent qui est déclenchée
+		=> Call : appel d'une fonction sur l'addresse d'un contrat
+			=> addr.call(abi.encodeWithSignature("myFunction()"))
+			=> S'execute dans le contexte du contrat parent (storage du parent, msg.sender est l'enfant etc)
+			=> Revert de la fonction parent ne s'applique PAS à la fonction enfant
+			=> En générale c'est une bonne façon de procéder en instanciant un booléen sur l'execution de la fonction puis un require juste après pour tester la bonne execution
+		=> Delegate Call
+			=> addr.delegateCall(abi.encodeWithSignature("myFunction()"))
+			=> S'execute dans le contexte du contrat enfant (storage de l'enfant, msg.sender est celui qui a fait appel à la fonction de l'enfant etc)
+				=> WARNING : 
+					=> les variables doivent impérativement ête déclarées dans le même ordre que celles du contrat parent (pb de slot mémoire)
+					=> un Delegate Call ne doit jamais être laissé libre d'accès par les utilisateurs avec une adresse paramétrable car on pourrait par exemple appeler un selfdestruct qui s'executerait dans le contexte de ce contrat
+
 
 
 COURS 6 : TRUFFLE
@@ -301,7 +321,31 @@ COURS 7 : HARDHAT
 COURS 8 : OPTIMISATION
 - NatSpec : Ethereum Natural Language Specification Format
 	=> méthode de standardisation des commentaires sur Solidity
+- Gas economy
+	- Memory <<< Storage
+		=> utiliser la memory pour la modification successive d'une même variable puis ne stocker sa valeur finale qu'à la fin dans le storage
+		=> pareil pour le parcours des tableaux, il vaut mieux cloner le tableau en memory
+	- Variables
+		=> ne pas affecter une variable avec sa valeur par défaut
+		=> Interchangement de valeurs entre 2 variables : (variable_1, variable_2) = (variable_2, variable_1)
+		=> Variable Packing : optimisation de l'utilisation slots mémoires lors de la déclaration des variables
+			=> en ordonnant la déclaration des variables, on peut "packer" plusieurs variables dans un même slot
+				=> 1 slot mémoire = 256 bits
+				=> uint = 256 bits
+					=> uint128 : 128 bits
+					=> ...
+				=> string = 256 bits
+				=> address = 64 bits
+	- Mapping < Fix array < Dynamic array
+	- Delete donne droit à un remboursement de max 15 000 gas
+	- Event < storage
+		=> utilisation des event pour les data non nécessaires dans le fonctionnement du smart contract
+		=> attention cependant car plus le temps passe, plus la blockchain s'allonge et plus il sera fastidieux de récupérer des event passés il y a longtemps
+	- If/Revert < Require << Assert
+		=> "require" et "revert" rembourse les gas non utilisés (mais pas tous ce qui a été utilisé avant)
+		=> "assert" ne rembourse pas les gas
 
+	
 
 DEV TESTS UNITAIRES
 - Describe (eq. context)
@@ -369,10 +413,9 @@ DEV SOLIDITY
 	=> on peut ajouter un paramètre au modifier
 	=> le "reste du code" est symbolisé par "_;"
 		=> en général le modifier se finit par "_;" mais on peut mettre du code après
+	=> WARNING : pas d'appels externes dans les modifiers car cela pourrait donner lieu à une boucle de type reentrancy si la fonction externe fait appel à la fonction du modifier
+	=> BONNE PRATIQUE : on se sert des modifiers pour factoriser des conditions
 - seuls les éléments fonctionnels (pas les commentaires, pas les espaces...) d'un smart contract consomment du gas
-	=> "require" et "revert" rembourse les gas non utilisés (mais pas tous ce qui a été utilisé avant)
-	=> "assert" ne rembourse pas les gas
-- If/revert consomme moins de gas que les require
 - execution asynchrone
 	=> la synchronicité sur un ordinateur monde comme EVM est trop compliqué à gérer
 - function : se définie par un entête de fonction (nom, paramètres...) + implementation (corps de la fonction)
@@ -399,10 +442,11 @@ DEV SOLIDITY
 - Revert permet d'annuler tout ce qui s'est passé, même l'émission d'évènements
 - Ne pas oublier dedécalrer les fonctions "Payable" lorsque la fonction sert à deposer de l'argent sur le contrat
 - Send / Transfer / Call
-	=> les fonctions send et transfer sont plafonnées à 3000 gas, ce qui peut causer l'echec de certaines transactions 
+	=> les fonctions send et transfer sont plafonnées à 3000 gas, ce qui peut causer l'echec de certaines transactions notamment si des instructions supplémentaires sont présentes dans la fonction fallback d'un contrat destinataire
 	=> il vaut donc mieux utiliser la fonction call !
-	=> call est une fonction bas niveau qui n'est pas dédiée uniquement qu'au transfert d'ether (utilisé aussi dans les notions d'héritage)
-		=> call "fait quelque chose" vers une addresse
+		=> call est une fonction bas niveau qui n'est pas dédiée uniquement qu'au transfert d'ether (utilisé aussi dans les notions d'héritage)
+			=> call "fait quelque chose" vers une addresse
+		=> WARNING : en n'ayant pas de gas fixe limite, call est sujet à la faille de reentrancy
 - Mettre un revert sur le rewrite d'une fonction receive permet d'éviter dans certains cas de recevoir des ether sur le contrat alors que ce n'est pas prévu
 - les events servent à faire des "logs" sur la blockchain
 	=> un event peut être émit avant la fin de la fonction, de tout façon il sera revert si ça crash
@@ -495,6 +539,8 @@ Outil
 		=> bien pour les débutants mais pas le top sur long terme
 	=> Miner du Sepolia : https://sepolia-faucet.pk910.de/
 	=> Prototyper sur web3 : https://eth.build/
+	=> Analyser la sécuriter de son smart contract : Mythril / Slither
+	=> Génération de tests unitaires : Echidna / Manticore
 	
 
 IDEES PROJETS
