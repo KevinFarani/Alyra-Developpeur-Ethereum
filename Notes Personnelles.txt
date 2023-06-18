@@ -1,0 +1,505 @@
+INTRO
+
+- 43 développeurs, 58 consultants
+- projet
+	=> mise en groupe de 1 dév, 2 non dev
+	=> lancement le 23 mai
+	=> validation des sujets le 12 juin
+	=> ne doit pas forcément être 100% opérationnel
+- Certification
+	=> se base sur 2 catégories
+		=> compétences demandées officiellement par l'état
+		=> compétences demandées par Alyra
+	=> 24,25,26,27 juillet
+- Organisation
+	=> Cours débloqués le jeudi, les lire à l'avance
+	=> 3 live par semaine
+		=> pratique dev le mercredi
+
+
+
+COURS 1 : INTRODUCTION BLOCKCHAIN
+
+- Premier réseau internet : Arpanet
+	=> Universitaire et militaire
+- Web 1.0 : site vitrine, affichage uniquement
+- Web 2.0 : valorisation de la données par des entreprises centralisées
+- Web 3.0 : valorisation de la données pour les gens
+- Bitcoin
+	=> créé en 2009 par Satoshi Nakamoto
+	=> continuité du mouvement Cypherpunks démarré en 1993
+- Proof of work
+	=> apparu en 1997 avec le hashcash
+	=> modèle de consensus
+		=> permet de d'attester de la véracité d'une transaction ou toute information inscrite sur la blockchain en fournissant un effort de dechiffrement important
+	=> le mineur rçoit une récompense pour le minage d'un block
+- Blockchain
+	=> ensemble des blocks qui forme une chaine
+- Block
+	=> regroupement de plusieurs transations
+	=> Hash (identifiant uniquement du bloc) : Numéro de bloc + Nonce + Data
+- Minage
+	=> validation d'un block : trouver un Nonce (numéro) qui permet d'avoir un Hash démarrant par "0000"
+	=> difficulté dépend du nombre de zéro à trouver (nombre de bits)
+	=> Tous les blocs sont liés entre eux par le hash du précédent bloc
+	=> Hashrate : ratio de la puissance de calcule par rapport à la difficulté de minage, plus le réseau est puissant plus la difficulté augmente
+- Réseau Blockchain
+	=> Blockchain décentralisée
+	=> la blockchain est divisée en plusieurs noeuds, chaque noeud possède une copie complète de la blockchain
+- Layers
+	=> Layer 1 : protocole principal de la blockchain (ex: ETH, BTC...)
+	=> Layer 2 : protocole secondaire quasi indépendant mais qui laisse une trace de toutes ses transactions sur le layer 1
+- Sécurité
+	=> La falsification d'un block nécessite de reminer ce block ET reminer l'ensemble des blocks suivants => coup énergétique énorme
+	=> Chaque noeud se compare, donc si un noeud est érroné il est "expulsé" du réseau
+- Private Key
+	=> Identification sur le réseau
+		=> Générée aléatoirement de manière déterminée (nombre de possibilité trop grand pour retomber sur la même)
+	=> Clé privée => Clé publique => Adresse bitcoin
+	=> utilisé pour signer les transactions par l'envoyeur
+- Public Key
+	=> dérivé de la Private Key
+	=> utilisé par le destinataire d'une transaction pour identifier l'envoyeur
+- Mnemonic : suite de 12 ou 24 mots à partir desquels une Private Key peut être générée
+- Transaction entre utilisateurs
+		=> Cryptographie asymétrique
+		=> Fonctionnement
+			=> Envoyeur : Clé privé + message => signature
+			=> Receveur : Signature + message + clé publique => validation de l'origine du message
+- ECDSA : methode de validation cryptographique
+- Merkle Tree
+	=> Concept cryptographique, 1979 par Ralph Merkle
+	=> Moyen de crypter un grand nombre d'informations de manière récursive (par couple) jusqu'à former une seul racine cryptée de petite taille
+		=> Je peux à partir d'un ensemble de données gigantesque, former une racine. Simplement à partir de cette racine, je peux vérifier si une donnée est présente dans dans l'arbre
+	=> symphony.iohk.io
+	
+	
+	
+COURS 2 : STAKING ET WALLETS
+- mempool
+	=> espace où se trouve toutes les transactions avant qu'elles ne soient vérifiées et inscrites sur la blockchain
+	=> les transactions sont prioritaires en fonction des frais qu'elles valent
+- Halving
+	=> division par deux des récompenses pour les mineurs
+- Coin VS Token
+	=> Les coins : crypto liée directement au protocole de la Blockchain (ex : BTC, ETH...)
+	=> Les token : crypto liée au protocole des applications déployées sur une Blockchain (ex : tous les altcoins sur ETH)
+- Proof of Stake
+	=> mise en jeu d'argent en échange d'une capacité à miner des blocks
+	=> slashing : pénalité appliquée sur la somme d'argent "staké" en cas de mauvais comportement
+	=> permet plus de souplesse mais n'est pas une solution de scalabilité
+	=> Minage de block
+		=> tirage au sort des validateurs, pas d'énergie à dépenser
+		=> tempo fixe : le temps entre chaque block est prédéfini et stable (12 secondes sur ETH)
+		=> epoch : "sauvegarde" de la blockchain au bout d'un certain nombre de blocks (32 blocks sur ETH)
+- Beacon chain
+	=> Blockchain dédiée à la gestion du système de proof of stake sur ETH
+- Attaque à 51%
+	=> Proof of work : une personne possède 51% de la puissance de minage
+	=> Proof of stake : une personne possède 51% des noeuds de validation
+	=> cela peut poser souci car mais n'a pas d'interet car cela décrédibiliserait complètement la blockchain en question
+- Process Proof of Stake sur ETH
+	=> Dépot de 32 ETH (minimum requis) sur deposit contract
+	=> execute un client de consensus
+	=> toutes les 12s, un validateur est tiré au sort pour valider un block
+	=> comité de validateur atteste du block
+	=> ...
+- Ethereum
+	=> Réseau géant d'ordinateurs
+	=> EVM : Ethereum Virtual Machine
+		=> Super ordinateur mondial qui répartit les transactions aux noeuds
+- Block size
+	=> la taille d'un block correspond au nombre de transactions qui la composent
+	=> plus la taille des blocks est élevée, plus le nombre de transactions par secondes l'est aussi (puisque le temps entre 2 blocks lui ne change pas)
+		=> MAIS les blocks sont plus compliqués à utiliser et nécessite plus de ressources
+- Gas
+	=> Quantification, en coût informatique, d'une intéraction avec avec la blockchain
+	=> Fee : Gas amount (Gas) * Gas price (ETH/Gas)
+	=> Gas price 
+		=> dépend de la congestion du réseau et de la compléxité des transactions demandées
+		=> Tableau de référence de toutes les transactions informatiques possibles et leur équivalent en Gas : https://www.evm.codes/
+		=> peut être gonflé pour prioriser sa transaction (système d'enchère)
+- Unités
+	=> BTC => 10^-8 Satoshis
+	=> ETH => GWEI (10^-9 ETH) => WEI (10^-18)
+- Wallets
+	=> Cold : créé hors réseau
+	=> Hot : créé sur internet
+	=> custodial (web wallet) : stoké en ligne via un tiers de confiance (ex: exchange)
+	=> non custodial (metamask, bravewallet, phantom...) : wallet qui stock le couple clé privé/clé publique en local sur l'ordinateur
+
+
+
+COURS 3 : ETHEREUM IMPROVEMENTS ET SMARTCONTRACTS
+- Le triangle visé :
+	=> Scalabilité
+	=> Décentralisation
+	=> Sécurité
+- The Merge
+	=> Passage de PoW à PoS pour Ethereum
+	=> Ethereum a été scindé en deux layers
+		=> Consensus Layer : dédié au système de consensus par le staking et à la gestion des noeuds (via beacon chain)
+			=> Client principal : Prysm
+		=> Execution Layer : dédié à la gestion des blocks et transactions
+			=> Client principal : Geth
+- Noeud de validation Ethereum
+	=> client de consensus
+	=> client d'execution
+	=> wallet de depot (32 ETH)
+	=> wallet de récompense
+- EIP : Ethereum Improvement Proposal
+	=> Proposition de modification du protocol Ethereum
+	=> regroupe les interfaces de fonctions
+	=> EIP importants
+		=> EIP 1559 
+			=> Mise à jour des fees d'Ethereum qui, au lieu d'être utilisées pour rémunérer les mineurs dans l'ancien système de PoW, sont maintenant burnées dans le système de PoS
+			=> de moins en moins ETH sont en circulation => deflationniste
+		=> EIP Shangai (Shapella)
+			=> A permis le destaking des ETH initialement bloqués pour The Merge
+			=> Le nom de ville est donné par la ville où l'EIP a été discuté la 1ère fois
+		=> EIP 3860
+			=> rendre les smarts contracts plus souples
+- ERC : Ethereum Request for Comments
+	=> lorsqu'un EIP est validé, il devient un ERC
+	=> regroupe l'implémentation des fonctions
+	=> ERC importants
+		=> ERC20 : norme token
+		=> ERC721 : norme NFT
+- Consensys : entreprise à l'origine de MetaMask
+	=> propriétaire de 
+		=> MetaMask
+		=> Truffle Suite
+		=> Infura
+			=> noeuds ethereum avec lesquels intéragit MetaMask
+- Truffle Suite
+	=> suite d'outils de développement sur Blockchain (dont Ganache)
+- Ganache
+	=> Blockchain locale qui tourne sur l'ordi
+		=> Commande : Ganache
+	=> importer un wallet sur metamask graçe àaux clés privées proposées
+- Smart contract
+	=> Les smart contracts, ou contrats intelligents, sont des programmes informatiques irrévocables, le plus souvent déployés sur une blockchain, qui exécutent un ensemble d’instructions pré-définies
+	=> possède sa propre adresse sur la blockchain
+		=> peut recevoir de la crypto
+- Proof of Authority
+	=> permet de créer des blocks en s'abtenant de suivre le process classique de la blokchain
+
+
+
+COURS 4 : CLIENT ET NOEUD BLOCKCHAIN + PRATIQUE GETH
+- Node : noeud blockchain qui vont utiliser des clients blockchain
+- Client Ethereum : permet de faire tourner et sécuriser la blockchain
+	=> ex : Geth
+		=> client ethereum développé en Go Ethereum
+		=> le + utilisé actuellement (>60%)
+- Type de client
+	=> Full Node : historique (ensemble des blocks) de toute la blockchain + état à l'instant T des 128 derniers blocks (ex: balance d'une adresse à un instant T) 
+	=> Archive Node : historique de l'ensemble des états de la blockchain à chaque instant
+	=> Light Node : uniquement les header de tous les blocks (rappel : Block = header + transactions) mais peut aussi interroger des fullnode
+- Fichier de genesis
+	=> Sert à configurer la blockchain
+	=> détermine le block genesis, qui est le tout 1er block
+- Puppeth 
+	=> fourni avec Geth (n'est plus dispo à ce jour...)
+	=> gestionnaire de Blockchain Privée
+		=> permet de mettre en place une blockchain privée avec son fichier Genesis etc.
+- Remote Procedure Call (RPC) : protocole de communication qui permet à un programme de lancer une procédure sur un autre programme hébergé sur un autre réseau, sans connaître les détails de ce dernier
+	=> permet aux applications décentralisées (dApps) d'interagir avec une blockchain
+- DAO : Organisation Autonome Décentralisée (Decentralized Autonomus Organization)
+	=> système de vote démocratique sur la blockchain
+		=> i.e. : voter pour les évolutions d'un protocol	
+		
+
+
+COURS 5 : SMART CONTRACT & SOLIDITY
+- Solidity : premier langage de smart contract
+	=> permet de déveloper sur la blockchain
+	=> basé sur ECMA script
+- Compilation
+	=> pour être compris par l'EVM, le langage solidity est compilé (compilateur SolC)
+	=> compilé en opcodes (langage moyen niveau) => puis compilé en bytecodes (langage machine)
+- Environnement de dev (IDE)
+	=> Remix : IDE en ligne, permet d'écrire et déployer des smart contracts
+		=> bien pour les débutants
+	=> Visual Studio Code : IDE windows
+		=> le mieux
+- Rappel sur les bits :
+	=> bit : 0 ou 1
+	=> ex : chiffre 8 bit = 01001101
+		=> chiffre 8 bit < 2^8 < 256
+		=> uint8 =< 256
+		=> int8 >= -128 <= 127
+	=> 1 octet (bytes) = 8 bits
+- Fonctions
+	=> Visibité (obligatoire)
+		=> public : la + grande visibilité, accessible pour tout le monde
+		=> external : on laisse l'accès à tout le monde SAUF au contrat qui implémente la fonction
+		=> internal : fonctions accessibles depuis le contrat et des contrats enfants
+		=> private : fonctions accessibles uniquement depuis le contrat en lui-même
+	=> Type (pas obligatoire)
+		=> View : uniquement lecture de la blockchain
+		=> Pure : n'accède pas au stockage de la blockchain
+		=> Payable : peut accépter des ethers 
+- Receive / Fallback (fonctions par défaut)
+	=> permet de gérer la reception d'ether sur un contrat
+	=> presque toujours "external payable"
+	=> voir schéma sur le cours du live par Ben pour comprendre la différence entre les deux
+- Variables globales
+	=> variables disponibles directement depuis la blockchain
+	=> Les + utiles
+		=> msg.value : quantité d'ether envoyé vers une fonction
+		=> msg.sender : addresse de la personne qui a executé la fonction
+			=> s'applique au dernier executant. Si j'appelle la fonction d'un contrat A qui lui appelle la fonction d'un contrat B, le msg.sender dans le contrat B contient l'addresse du contrat A.
+		=> block.timestamp : heure à laquelle la transaction a été effectuée (inscrite dans la blockchain)
+- OpenZeppelin
+	=> + grande librairie de smart contracts d'ethereum
+	=> utilisation gratuite, business model basé sur l'audit de sécurité
+	=> principaux contrats à connaitre
+		=> Ownable
+		=> AccessControl
+			=> gestion de rôles
+		=> ERC20 et ERC721
+		=> Address.sol
+		=> VestingWallet
+			=> permet de release des token petit à petit
+- Heritage
+	=> Is
+		=> copie l'entiéreté du corps du contrat parent dans l'enfant (toutes les fonctions)
+	=> Using
+		=> permet d'instancier un objet et d'utiliser les fonctions directement dessus
+	=> Call
+		=> appelle d'une fonction sur l'addresse d'un contrat
+			=> addr.call(abi.encodeWithSignature(myFunction()))
+	=> New
+		=> redéploie le contrat à une nouvelle addresse (consomme beaucoup de gas)
+		
+
+
+COURS 6 : TRUFFLE
+- RCP ID : identifiant qui permet d'appeler les noeuds de clients RPC existants (ex : infura, alchemy...)
+- HD Wallet : permet de déployer des contrats depuis des adresses de wallet réelles (ex: Metamask...)
+- Fork Blockchain
+	=> utilité : recreer les conditions réelles d'une blockchain pour tester ses contrats
+- Déploiement :
+	=> TO COMPLETE
+
+	
+
+COURS 7 : HARDHAT
+- Blockchain locale
+	=> par défaut c'est le premier compte de la liste qui déploie les smart contracts et lance les fonctions
+- librairie ethers
+	=> getSigners()
+		=> récupère les comptes fournis au départ
+- Test unitaires
+	=> Exemples tests unitaires : https://hardhat.org/tutorial/testing-contracts#reusing-common-test-setups-with-fixtures
+- Déploiement :
+	=> TO COMPLETE
+	=> npm install hardhat-docgen
+
+
+COURS 8 : OPTIMISATION
+- NatSpec : Ethereum Natural Language Specification Format
+	=> méthode de standardisation des commentaires sur Solidity
+
+
+DEV TESTS UNITAIRES
+- Describe (eq. context)
+	=> ensemble de tests
+	=> bonnes pratiques : pas de règle générale
+		=> par temporalité
+		=> par fonction
+- it : test unitaire en javascript
+	=> il peut y en avoir plusieurs dans un même describe
+	=> normalement on fait un expect par it mais lorsque l'on travaille sur le même objet construit de la même façon on peut
+- Javascript vs Solidity
+	=> les 2 sont possibles mais de manière générale on utilise Javascript
+		=> Solidity reste top orienté blockchain alors souvent on veut sortir des choses de la blockchain (ex: Dapp)
+- .call()
+	=> sert à récupérer des valeurs
+- Mocha : banque de tests unitaires
+- Test Helpers (Oppenzeppelin)
+	=> librairie de tests la plus utilisée
+	=> 3 indispensables
+		=> expect
+			=> test des éléments entre eux
+		=> expectEvent
+			=> test d'émission d'évènements
+		=> expectRevert
+			=> test les require
+			=> .unspecified pour les erreurs non controlées (ex: out of array)
+- Big numbers
+	=> les uint dans solidity sont par défaut des uint256 (big numbers)
+		=> difficulté de gérer ça par javascript donc nécessité de les convertir (ex: toString dans Hardhat)
+	=> test entre deux big numbers : FirstBN.eq(FirstBN)
+	=> https://web.archive.org/web/20210517151027/https://blog.enuma.io/update/2019/01/31/safe-use-of-bignumber.js.html
+- Coverage : indicateurs de recouvrement des tests unitaires
+	=> Statements
+		=> permet de savoir si toutes les instructions d'un smart contract sont testées
+	=> Branch
+		=> permet de savoir si toutes les branches (possibilités) d'un smart contract sont testées
+	=> Branch 100% => Statements 100% but not the opposite
+		=> ex : contract avec une seule fonction avec un seul require
+			=> si on test le cas où le require marche : Statements 100%, Branch 50% car on a pas testé le cas qui marche pas
+		=> pas forcément possible d'avoir 100% surtout si on utilise des librairies
+- Hooks
+	=> before() is run once before all the tests in a describe
+	=> after()   is run once after all the tests in a describe
+	=> beforeEach() is run before each test in a describe
+		=> plus on avance dans les tests, plus le BeforeEach va s'agrandir avec des choses que l'on a testé avant
+	=> afterEach()   is run after each test in a describe
+- Dans le cas de fonctions de type setter, si set de plusieurs attributs, il faut faire les tests pour chaque attribut
+- raccourcis
+	=> xit = it.skip
+	=> Describe.skip = xDescribe
+- Truffle5
+	=> passer les tests de Truffle à Hardhat
+	
+
+
+DEV SOLIDITY
+- mandatory de préciser la licence utilisée
+- mandatory de préciser la version utilisée
+	=> les versions entre plusieurs contracts imbriqués doivent être la même !
+- ce n'est pas le fichier en entier qui est compilé mais le contract défini
+- l'import permet de faire de l'héritage avec "is" mais pas de compiler plusieurs contracts dans un seul fichier
+- "constructor" : permet de définir des variables au moment du déploiement du contrat
+	=> si on hérite d'un contrat avec constructor alors il faut forcément faire un constructor qui importe son père pour l'implémenter
+- "modifier" : bout de code qui vient de rajouter un bout de code dans une fonction existante sans réecrire toute la fonction
+	=> on peut ajouter un paramètre au modifier
+	=> le "reste du code" est symbolisé par "_;"
+		=> en général le modifier se finit par "_;" mais on peut mettre du code après
+- seuls les éléments fonctionnels (pas les commentaires, pas les espaces...) d'un smart contract consomment du gas
+	=> "require" et "revert" rembourse les gas non utilisés (mais pas tous ce qui a été utilisé avant)
+	=> "assert" ne rembourse pas les gas
+- If/revert consomme moins de gas que les require
+- execution asynchrone
+	=> la synchronicité sur un ordinateur monde comme EVM est trop compliqué à gérer
+- function : se définie par un entête de fonction (nom, paramètres...) + implementation (corps de la fonction)
+	=> possède des propriétés (mutabilité...)
+- Trois type d'éléments :
+	=> Contract : toutes les fonctions sont implémentées
+	=> Library : au moins une fonction non implémentée
+	=> Interface : aucune fonction n'est implémentée (seulement les en-têtes dispos)
+- Communiquer avec un smart contract nécessite
+	=> abstraction du contrat (ABI : Application Binary Interface) : récapitulatif de l'entête des fonctions du contrat
+		=> si on veut utiliser qu'une fonction il ne faut que l'entete de cette fonction
+	=> adresse du contrat
+- Event ou Return ?
+	=> Event : sortir des éléments/infos d'un contrat
+		=> afficher dans le front
+		=> faire des logs
+	=> Return : transmettre des éléments/infos entre des fonctions
+- Stocker de la données dans un contrat
+	=> Tableaux
+	=> Mapping (mapping de mapping possible)
+- conventions de nommage
+	=> mettre "_" pour les paramètres des fonctions (pour différencier des variables de stockage)
+	=> mettre un "i_" en prefixe des variables typées "immutable"
+- Revert permet d'annuler tout ce qui s'est passé, même l'émission d'évènements
+- Ne pas oublier dedécalrer les fonctions "Payable" lorsque la fonction sert à deposer de l'argent sur le contrat
+- Send / Transfer / Call
+	=> les fonctions send et transfer sont plafonnées à 3000 gas, ce qui peut causer l'echec de certaines transactions 
+	=> il vaut donc mieux utiliser la fonction call !
+	=> call est une fonction bas niveau qui n'est pas dédiée uniquement qu'au transfert d'ether (utilisé aussi dans les notions d'héritage)
+		=> call "fait quelque chose" vers une addresse
+- Mettre un revert sur le rewrite d'une fonction receive permet d'éviter dans certains cas de recevoir des ether sur le contrat alors que ce n'est pas prévu
+- les events servent à faire des "logs" sur la blockchain
+	=> un event peut être émit avant la fin de la fonction, de tout façon il sera revert si ça crash
+		=> mais mieux de le mettre à la fin car consomme tout de même du gas
+- le type "private" n'est pas gage de sécurité des données, certains audit peuvent y accèder
+- Par défaut une variable est de type "internal"
+- mapping vs tableau
+	=> gas mapping < gas tableau
+	=> si besoin d'itérer alors tableau pas mapping
+	=> on peut mettre des mappings en cascande pour des structures complexes
+- une variable déclarée en début de contrat est forcément de type "storage"
+- String
+	=> dans solidity, ce sont des tableaux de caractères
+	=> ne sont pas comparables directement avec "==", la façon de faire est de les hasher pour les comparer
+		=> use keccak256(abi.encodedPacked())
+- Array
+	=> attributs
+		=> .lenght : taille du tableau
+		=> .push : ajoute un élément
+			=> uniquement tableaux dynamiques
+		=> .pop : retire dernier élément
+			=> uniquement tableaux dynamiques
+	=> fonction
+		=> delete : remet à zéro
+			=> peut être utilisé sur un élément ou sur un tableau entier
+	=> si on se plante d'id dans le tableau, la fonction revert
+- Calldata
+		=> consomme moins que memory
+		=> utilisable uniquement dans une function external
+- Chaines de caractères
+	=> Bytes
+		=> tableau de caractères
+		=> plus couteux en gas
+		=> permet d'avoir la longeur
+	=> String
+		=> tableau de caractères limités à l'UTF8
+		=> pas de fonction de longueur
+		=> peut être casté en bytes
+- Etherscan
+	=> visualise tout ce qui se passe sur la blockchain ethereum
+	=> peut vérifier des contrats afin de rendre visible les fonctions
+		=> permet d'avoir une interface d'administration à la remix pour intéragir avec le contrat
+- L'appel de la librairie OpenZeppelin ne doit pas se faire sur le master du github
+	=> il faut utiliser le @openzeppelin qui utilise npm
+
+
+
+Dico :
+	=> Clés privées, clés publiques et adresses dans Bitcoin : https://cryptoast.fr/cles-privees-cles-publiques-et-adresses-dans-bitcoin/
+	=> Portefeuille, phrase secrète et génération d'adresses : https://cryptoast.fr/portefeuille-phrase-secrete-et-generation-dadresses/
+	=> Comprendre la blockchain : andersbrownworth.com
+	=> Visualiser arbre de merkle de bitcoin : ymphony.iohk.io
+	=> Visualiser le fonctionnement du mempool : https://txstreet.com/v/eth
+	=> Apprendre Solidity en s'amusant : https://cryptozombies.io/ 
+	=> Doc Solidity : https://docs.soliditylang.org/en/v0.8.18/
+		=> Lire au moins les Basics
+		=> exemples de dev : https://solidity-by-example.org/call/
+	=> Visualiser répartition des clients ETH : https://clientdiversity.org/
+	=> Comprendre le Zero Knowledge Proof : https://www.youtube.com/watch?v=_5VcPzBQwbs&ab_channel=myDid
+	=> Low level calls : https://ethereum-blockchain-developer.com/2022-04-smart-wallet/07-low-level-calls-in-depth/
+	=> ZKP (Zero Knowledge Proof) expliqué facilement : https://www.youtube.com/watch?v=fOGdb1CTu5c&ab_channel=WIRED
+	=> Librairie WEB3 JS : https://docs.web3js.org/
+	=> Liste des Chain ID : https://chainlist.org/
+	=> comprendre les "promises" sur js : https://www.youtube.com/watch?v=05mKXSdkCJg&ab_channel=Grafikart.fr
+	=> Hardhat VS Truffle : https://www.youtube.com/watch?v=tfQFk6pmtFc&ab_channel=DappUniversity
+		=> Comparaison de l'adoption : https://npmtrends.com/hardhat-vs-truffle
+		=> Selon Ben il faut connaitre les deux
+	=> se tenir au courant des evols eth : https://weekinethereumnews.com/
+	=> Typescript sur hardhat : https://yuichiroaoki.medium.com/testing-erc20-smart-contracts-in-typescript-hardhat-9ad20eb40502
+	=> NatSpec : 
+		https://docs.soliditylang.org/en/develop/natspec-format.html
+		https://jeancvllr.medium.com/solidity-tutorial-all-about-comments-bc31c729975a
+		
+A Regarder 
+	=> Bitcoin Arte sur youtube
+	=> série Silicon Valley
+
+A Lire
+	=> Mastering Ethereum
+	
+Outil
+	=> Fenetre de codes pour les cours : https://carbon.now.sh/
+	=> github Igor : https://github.com/ibourn/Developpeur-Ethereum-Template/tree/homework/3.%20Solidity
+	=> générateur de gitignore : https://www.toptal.com/developers/gitignore/api/soliditytruffle
+	=> Provider RCP : 
+		=> Goerli : https://www.infura.io/
+		=> Mumbai : https://www.alchemy.com/
+	=> Remix : https://remix.ethereum.org/
+		=> interpreteur et deployeur de smart contracts
+		=> bien pour les débutants mais pas le top sur long terme
+	=> Miner du Sepolia : https://sepolia-faucet.pk910.de/
+	=> Prototyper sur web3 : https://eth.build/
+	
+
+IDEES PROJETS
+=> lutte contre le spam
+=> créer un validateur pour cronos
+=> chasseur de baleines
+=> empreintes digitales : creer une adresse publique sur la blockchain à partir d'une empreinte digitale qui fait office de clé privée
+=> fidélisation client
