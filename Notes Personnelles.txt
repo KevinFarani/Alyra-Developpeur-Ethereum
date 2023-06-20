@@ -204,7 +204,7 @@ COURS 4 : CLIENT ET NOEUD BLOCKCHAIN + PRATIQUE GETH
 	=> gestionnaire de Blockchain Privée
 		=> permet de mettre en place une blockchain privée avec son fichier Genesis etc.
 - Remote Procedure Call (RPC) : protocole de communication qui permet à un programme de lancer une procédure sur un autre programme hébergé sur un autre réseau, sans connaître les détails de ce dernier
-	=> permet aux applications décentralisées (dApps) d'interagir avec une blockchain
+	=> permet aux applications décentralisées (dApps) d'interagir avec une blockchain sans avoir à installer un client etc
 - DAO : Organisation Autonome Décentralisée (Decentralized Autonomus Organization)
 	=> système de vote démocratique sur la blockchain
 		=> i.e. : voter pour les évolutions d'un protocol	
@@ -352,6 +352,14 @@ COURS 8 : OPTIMISATION
 		=> Avant 0.8 : -1 pour uint => 2^256-1
 		=> Après 0.8 : -1 pour uint => Revert
 			=> unchecked : permet de revenir à l'ancienne façon 
+
+
+
+COURS 9 : DAPP
+- Web3.js
+	=> librairie qui permet au front d'intéragir avec des blockchain EVM
+	=> existe aussi pour python (web3.py)
+
 
 
 
