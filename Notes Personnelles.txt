@@ -355,11 +355,26 @@ COURS 8 : OPTIMISATION
 
 
 
-COURS 9 : DAPP
+COURS 9 : DAPP & DAO
 - Web3.js
 	=> librairie qui permet au front d'intéragir avec des blockchain EVM
 	=> existe aussi pour python (web3.py)
-
+- ReactJS : librairie javascript
+	=> permet de diviser la construction du front en plusieurs "composants"
+	=> les composants sont dynamique et peuvent s'actualiser en fonction des évènnements côté front
+	=> Rendering de l'UI côté client
+- NextJS : framework ReactJS
+	=> Rendering de l'UI côté server
+	=> Gros avantage pour le SEO (robots ont plus de facilité à parser la page)
+	=> système de routing natif géré par le système de fichiers, chaque dossier devenant une route (dans ReactJS il faut installer React Router DOM et créer des routes manuellement)
+- Décentralisation progressive
+	=> en général les projets ne commencent pas totalement décentralisé car sans communauté existante, on se retrouve vite dans un cas où les jetons de gouvernance sont centralisés
+- The Graph
+	=> indexeur de données blockchain
+	=> principe : les données dispos sur la blokchain (ex: events) sont parfois difficiles à accèder dans le temps. The graph capte toutes ces données au moment où les transactions sont réalisées et les indexe pour les rendre plus facilement accessible.
+	=> subgraph : définition de l'écoute de la blockchain. ex : subgraph pour écouter les events d'un smart contract
+	=> langage spécifique pour récupérer les données : graphql
+	=> coûts associés : on verse des $GRT sur l'addresse du graph qu'on utilise et à chaque requête effectuée sa pioche dans la cagnotte
 
 
 
@@ -467,6 +482,7 @@ DEV SOLIDITY
 - les events servent à faire des "logs" sur la blockchain
 	=> un event peut être émit avant la fin de la fonction, de tout façon il sera revert si ça crash
 		=> mais mieux de le mettre à la fin car consomme tout de même du gas
+	=> ils sont stockés dans les transactions
 - le type "private" n'est pas gage de sécurité des données, certains audit peuvent y accèder
 - Par défaut une variable est de type "internal"
 - mapping vs tableau
@@ -507,6 +523,13 @@ DEV SOLIDITY
 		=> permet d'avoir une interface d'administration à la remix pour intéragir avec le contrat
 - L'appel de la librairie OpenZeppelin ne doit pas se faire sur le master du github
 	=> il faut utiliser le @openzeppelin qui utilise npm
+
+
+
+DEV DAPP
+- Lorsque l'on redemarre la blockchain locale, il faut réinitialiser metamask
+- Pour tester un site web : https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
+	=> extension vscode
 
 
 
@@ -551,9 +574,11 @@ Outil
 	=> Fenetre de codes pour les cours : https://carbon.now.sh/
 	=> github Igor : https://github.com/ibourn/Developpeur-Ethereum-Template/tree/homework/3.%20Solidity
 	=> générateur de gitignore : https://www.toptal.com/developers/gitignore/api/soliditytruffle
-	=> Provider RCP : 
+	=> Recommandation Provider RCP : 
 		=> Goerli : https://www.infura.io/
 		=> Mumbai : https://www.alchemy.com/
+		=> https://www.quicknode.com
+		=> https://www.starton.com/
 	=> Remix : https://remix.ethereum.org/
 		=> interpreteur et deployeur de smart contracts
 		=> bien pour les débutants mais pas le top sur long terme
@@ -561,11 +586,13 @@ Outil
 	=> Prototyper sur web3 : https://eth.build/
 	=> Analyser la sécuriter de son smart contract : Mythril / Slither
 	=> Génération de tests unitaires : Echidna / Manticore
+	=> SDK web3 : Tatum
+	
 	
 
-IDEES PROJETS
-=> lutte contre le spam
-=> créer un validateur pour cronos
-=> chasseur de baleines
-=> empreintes digitales : creer une adresse publique sur la blockchain à partir d'une empreinte digitale qui fait office de clé privée
-=> fidélisation client
+PROJET 3
+- ne pas oublier de résoudre le dos gas
+- 10h par personne environ
+- passer par les events pour afficher les proposa
+
+
