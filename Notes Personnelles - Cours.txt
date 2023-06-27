@@ -356,13 +356,15 @@ COURS 8 : OPTIMISATION
 
 
 COURS 9 : DAPP & DAO
-- Web3.js
-	=> librairie qui permet au front d'intéragir avec des blockchain EVM
-	=> existe aussi pour python (web3.py)
+- Web3.js / ether.js / Viem
+	=> librairies qui permettent au front d'intéragir avec des blockchain EVM
+	=> Viem est en train de prendre le lead
+	=> Web3.js est le plus vieux, non utilisable avec RainbowKit
 - ReactJS : librairie javascript
 	=> permet de diviser la construction du front en plusieurs "composants"
 	=> les composants sont dynamique et peuvent s'actualiser en fonction des évènnements côté front
 	=> Rendering de l'UI côté client
+	=> open source par les équipes Facebook
 - NextJS : framework ReactJS
 	=> Rendering de l'UI côté server
 	=> Gros avantage pour le SEO (robots ont plus de facilité à parser la page)
@@ -375,7 +377,8 @@ COURS 9 : DAPP & DAO
 	=> subgraph : définition de l'écoute de la blockchain. ex : subgraph pour écouter les events d'un smart contract
 	=> langage spécifique pour récupérer les données : graphql
 	=> coûts associés : on verse des $GRT sur l'addresse du graph qu'on utilise et à chaque requête effectuée sa pioche dans la cagnotte
-
+- Truffle box : https://www.trufflesuite.com/boxes
+	=> applications préfaites disponibles en plusieurs langages
 
 
 DEV TESTS UNITAIRES
@@ -391,7 +394,9 @@ DEV TESTS UNITAIRES
 	=> les 2 sont possibles mais de manière générale on utilise Javascript
 		=> Solidity reste top orienté blockchain alors souvent on veut sortir des choses de la blockchain (ex: Dapp)
 - .call()
-	=> sert à récupérer des valeurs
+	=> sert à récupérer des valeurs (fonctions de type get)
+- .send()
+	=> sert à écrire quelque chose sur la blockchain (fonctions de type write)
 - Mocha : banque de tests unitaires
 - Test Helpers (Oppenzeppelin)
 	=> librairie de tests la plus utilisée
@@ -526,10 +531,20 @@ DEV SOLIDITY
 
 
 
-DEV DAPP
+DEV DAPP & REACT
 - Lorsque l'on redemarre la blockchain locale, il faut réinitialiser metamask
 - Pour tester un site web : https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer
 	=> extension vscode
+- Return : dans le return d'un composant, toujours avoir une balise parente unique
+- ? : appel des variables qui permet de tester si une valeur est bien renvoyée et ne pas afficher d'erreur en cas de lenteur de communication avec la blockchain
+- Hooks (nécessite "use client" en début de fichier)
+	=> useState : modifier la valeur d'une variable (et que cette modif se répercute directement sur le front)
+	=> useEffect : faire une action en fonction d'un event (chargement de page, modification d'une variable, démontage du composant...)
+	=> useContext : partage d'information (state, fonction...) entre plusieurs composants
+- Les props (properties)
+	=> transmission de données entre composants
+	=> peut être une fonction
+- Layout.js : englobe toute l'application
 
 
 
@@ -562,6 +577,7 @@ Dico :
 	=> Attaques connues:
 		https://consensys.github.io/smart-contract-best-practices/attacks/
 		https://rekt.news/fr/
+	=> Cours React 1h : https://www.youtube.com/watch?v=SqcY0GlETPk&ab_channel=ProgrammingwithMosh
 		
 A Regarder 
 	=> Bitcoin Arte sur youtube
