@@ -379,6 +379,66 @@ COURS 9 : DAPP & DAO
 	=> coûts associés : on verse des $GRT sur l'addresse du graph qu'on utilise et à chaque requête effectuée sa pioche dans la cagnotte
 - Truffle box : https://www.trufflesuite.com/boxes
 	=> applications préfaites disponibles en plusieurs langages
+- Oracle : permet de récupérer des données off-chain pour les mettre on-chain
+	=> on interroge un smart contract sur des info off chain
+	=> + connu : chainlink
+		=> fonctionne en mettant un nombre de link bloqué dans un smart contract et dans lesquels les gens vont pouvoir piocher pour faire des requêtes
+
+
+
+COURS 10 : DEFI
+- Pool de liquidité : source de tokens qui permet d'effectuer des swaps
+	=> imparmanent loss : gains non réalisé en ayant mis des tokens dans une pool de liquidité plutôt que de les avoir simplement holdé
+- Lending
+	=> Protocoles connus : Aave
+	=> le lending se fait sur la base de collaterals
+	=> liquidation : processus qui consiste à ce que quelqu'un paie le prêteur et récupère sa valeur en se servant sur le collateral
+		=> beaucoup de liquidation sont faites par des bots
+		=> flash loan : processus qui consiste à faire un emprunt pour liquider une position et rembourser directement son emprunt avec le collateral récupéré
+- Token Value
+	=> 2 possibilités de donner une valeur à un token
+		=> centralisé : on détermine son prix de manière artificielle
+		=> décentralisé : on lance le token en le mettant sur une pool de liquidité
+			=> il suffit d'intégrer les fonctions d'uniswapr
+- Staking : obtenir des récompenses pour locker des tokens
+	=> plusieurs possibilités
+		=> minting : libération de tokens périodique et distribution aux stakers
+
+
+
+COURS 11 : NFT
+- Non fongible : qui est unique
+	=> terme qui n'est pas propre à la blockchain
+		=> ex en droit on distingue les "coprs certains" des "fongibles"
+- IPFS : Interplanetary File System
+	=> protocole peer to peer de stockage
+	=> système de graphe acyclique != Blockchain
+	=> permet de pallier au problème de stockage sur la blockchain pour les images des NFTs notamment
+- ERC721 : standard des NFTs
+	=> gère le preuve de possession
+	=> permet une gestion standard des NFTs dans les Dapp
+	=> un contrat ERC721 correspond à une collection de NFTs
+- Mint : création d'un nouvel NFT d'une collection
+	=> un asset avec un ID donné passe de l'adresse 0 à l'adresse de son possesseur
+- Metadata : données sur l'objet auquel le NFT fait référence
+	=> ex : url de l'image, puissance d'une arme, chanteur d'un billet de concert...
+	=> définies par l'ERC721Metadata.sol
+	=> standards : https://docs.opensea.io/docs/metadata-standards
+- ERC 1155 : semi fongible tokens (multi token)
+	=> collection de token dont certains équivalent aux autres (ex: 100 épées,150 haches...)
+- EIP2981 : gestion des royalties
+- ERC721A
+	=> permet de faire des économies de gas au niveau du mint (utile pour les projets avec mint de beaucoup NFTs d'un coup)	
+	=> mais coûte plus cher en gas au niveau des autres opérations de transfert
+- whitelist
+	=> afin de limiter les gas une bonne façon est de passer un merkle tree des adresses whitelistées
+		=> on fait un json des adresses whitelistées
+		=> on hash les adresses qui seront les feuilles de l'arbre de merkle
+		=> on fait un merkle tree des adresses hachées
+		=> pour vérifier qu'une adresse est whitelistée il faut l'adresse, la racine du merkle tree et la preuve
+			=> si whitelistée, la preuve est un tableau de bytes
+			=> si pas whitelistée, la preuve est un tableau vide
+
 
 
 DEV TESTS UNITAIRES
@@ -578,7 +638,13 @@ Dico :
 		https://consensys.github.io/smart-contract-best-practices/attacks/
 		https://rekt.news/fr/
 	=> Cours React 1h : https://www.youtube.com/watch?v=SqcY0GlETPk&ab_channel=ProgrammingwithMosh
-		
+	=> Lexique Defi : https://lecascyril.notion.site/lecascyril/Lexique-DeFi-c307b62a553744e4acde505637a1e3a6
+	=> Exemples de contrats solidity : https://solidity-by-example.org/
+	=> Les maths dans la Defi : https://lecascyril.notion.site/Les-maths-dans-la-DeFi-50b8bd9fa1d5487d918caf21b6629a48?pvs=4
+	=> Normes metadata NFT : https://docs.opensea.io/docs/metadata-standards
+	=> Remplir son profil GitHub : https://docs.github.com/fr/account-and-profile/setting-up-and-managing-your-github-profile/customizing-your-profile/managing-your-profile-readme
+	=> creer une factory de contrats : https://www.youtube.com/watch?v=883-koWrsO4&ab_channel=SmartContractProgrammer
+	
 A Regarder 
 	=> Bitcoin Arte sur youtube
 	=> série Silicon Valley
@@ -603,12 +669,53 @@ Outil
 	=> Analyser la sécuriter de son smart contract : Mythril / Slither
 	=> Génération de tests unitaires : Echidna / Manticore
 	=> SDK web3 : Tatum
-	
-	
-
-PROJET 3
-- ne pas oublier de résoudre le dos gas
-- 10h par personne environ
-- passer par les events pour afficher les proposa
+	=> déployer gratuitement des app reacts sur serveur public : https://vercel.com/
+	=> swap qui optimise les pools : https://app.odos.xyz/
+	=> outil de création de NFTs : https://github.com/nftchef/
 
 
+IDEES
+- Faire un CV web3 (contrat + token + NFT)
+
+
+
+OTHERS
+Général :
+Ctrl + P : Accéder à un fichier spécifique par son nom.
+Ctrl + Shift + P : Accéder à la palette de commandes.
+Ctrl + Shift + N : Ouvrir une nouvelle fenêtre de code.
+Ctrl +, (virgule) : Ouvrir les paramètres utilisateur.
+Ctrl + K, Ctrl + S : Ouvrir les raccourcis clavier.
+
+Édition de texte :
+Ctrl + X : Couper la ligne actuelle ou la sélection.
+Ctrl + C : Copier la ligne actuelle ou la sélection.
+Ctrl + V : Coller la ligne actuelle ou la sélection.
+Ctrl + Z : Annuler la dernière modification.
+Ctrl + Shift + Z : Rétablir la dernière modification annulée.
+Ctrl + D : Sélectionner la prochaine occurrence du texte sélectionné.
+Alt + Click : Insérer plusieurs curseurs.
+Navigation dans le code :
+Ctrl + G : Aller à une ligne spécifique.
+Ctrl + Puis. : Aller à la définition d'un symbole.
+Ctrl + - (tiret) : Revenir à la dernière position.
+Ctrl + Shift + - (tiret) : Avancer à la dernière position.
+Ctrl + F : Rechercher dans le fichier actuel.
+Ctrl + H : Remplacer dans le fichier actuel.
+Ctrl + F + F : Rechercher dans tous les fichiers du projet.
+Ctrl + H + H : Remplacer dans tous les fichiers du projet.
+
+Navigation dans l'interface :
+Ctrl + B : Afficher/masquer la barre latérale.
+Ctrl + J : Afficher/masquer le panneau de terminal intégré.
+Ctrl + \ : Afficher/masquer l'éditeur de terminal.
+Ctrl + Shift + E : Accéder à l'explorateur de fichiers.
+Ctrl + Shift + G : Accéder à l'interface de contrôle de version intégrée.
+Ctrl + Shift + D : Accéder à la vue de débogage.
+
+Débogage :
+F5 : Lancer le débogage.
+F9 : Ajouter/Supprimer un point d'arrêt.
+F10 : Passer à l'instruction suivante.
+F11 : Entrer dans la fonction actuelle.
+Shift + F11 : Sortir de la fonction actuelle.
